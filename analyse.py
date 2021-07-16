@@ -56,11 +56,11 @@ def get_map(item_name,item_name_list,item_num_list):
     out_file_name = './analyse/'+item_name+'.html'
     _map.render(out_file_name)
 
-def word_cloud(item_name,item_name_list,item_num_list,word_size_range):
-    print(item_name,item_name_list,item_num_list,word_size_range)
+def word_cloud(item_name,item_name_list,item_num_list):
     data_pair = [list(z) for z in zip(item_name_list, item_num_list)]
     wordcloud = WordCloud(init_opts=opts.InitOpts())
-    wordcloud.add(series_name=item_name,data_pair=data_pair,shape='pentagon')
+    # wordcloud.add(series_name=item_name,data_pair=data_pair,shape='star')
+    wordcloud.add(series_name=item_name,data_pair=data_pair,mask_image='./data/mask_bg.png')
     out_file_name = './analyse/'+item_name+'.html'
     wordcloud.render(out_file_name)
     
@@ -175,7 +175,6 @@ if __name__ == '__main__':
     with codecs.open(in_file_name, encoding='utf-8') as f:
         friends = json.load(f)
     
-
     #待统计参数
     sex_counter =  Counter()#性别
     Province_counter = Counter()#省份
@@ -192,7 +191,6 @@ if __name__ == '__main__':
         NickName_list.append(friend['NickName'])
         #签名关键词提取
         get_tag(friend['Signature'],Signature_counter)
-        
 
     #性别
     name_list,num_list = dict2list(sex_counter)
@@ -211,7 +209,7 @@ if __name__ == '__main__':
 
     #微信好友签名关键词
     name_list,num_list = counter2list(Signature_counter.most_common(200))
-    word_cloud('微信好友签名关键词',name_list,num_list,[20,100])
+    word_cloud('微信好友签名关键词',name_list,num_list)
     
     #头像合成
     mergeImage()
